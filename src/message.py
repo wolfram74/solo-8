@@ -14,7 +14,7 @@ class Message():
         return encoding(self.payload)
 
     def destination(self):
-        return self.payload['destination']
+        return tuple(self.payload['destination'])
 
     @classmethod
     def fromByteString(cls, byte_string):
