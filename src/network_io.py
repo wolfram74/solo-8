@@ -23,3 +23,6 @@ class NetworkIO():
         self.inbox.append(
             Message.fromByteString(data)
             )
+
+    def enque(self,message):
+        self.outbox.append(message)

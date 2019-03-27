@@ -18,7 +18,8 @@ lobby_address =     (
     )
 
 player = Player(connection, lobby_address)
-test_message = Message(
-    {'message_id':0, 'player_alias':'farts', 'destination':lobby_address})
-player.network_obj.outbox.append(test_message)
-player.network_obj.transmit()
+player.request_player_id()
+
+while True:
+    if player.network_obj.outbox:
+        player.network_obj.transmit()
