@@ -6,7 +6,7 @@ def encoding(subject):
 def decoding(message_string):
     return json.loads(message_string.decode())
 
-class Message()
+class Message():
     def __init__(self, payload):
         self.payload = payload
 
