@@ -13,7 +13,10 @@ class Message():
     def encode(self):
         return encoding(vars(self))
 
+    def destination(self):
+        return self.payload['destination']
+
     @classmethod
-    def fromByteString(byte_string):
+    def fromByteString(cls, byte_string):
         unpacked_dict = decoding(byte_string)
-        return MessageFactory.build(**unpacked_dict)
+        return Message(unpacked_dict)

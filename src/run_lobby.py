@@ -13,5 +13,11 @@ connection = NetworkIO(
     )
 lobby = Lobby(connection)
 
+while True:
+    lobby.network_obj.recieve()
+    if lobby.network_obj.inbox:
+        print('got messages')
+        msg = lobby.network_obj.inbox.pop(0)
+        print(msg.payload)
 # lobby
 

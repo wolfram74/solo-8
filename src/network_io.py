@@ -12,10 +12,10 @@ class NetworkIO():
     def transmit(self):
         next_message = self.outbox.pop(0)
         print(next_message)
-        print(next_message.destination)
+        print(next_message.destination())
         self.socket.sendto(
             next_message.encode(),
-            next_message.destination
+            next_message.destination()
             )
 
     def recieve(self):
