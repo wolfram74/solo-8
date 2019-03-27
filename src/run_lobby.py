@@ -23,7 +23,7 @@ while True:
         print('got messages')
         msg = lobby.network_obj.inbox.pop(0)
         # print(msg.payload)
-        getattr(lobby, msg.payload['message_id'])(msg)
+        getattr(lobby, msg.payload['message_type'])(msg)
     if lobby.network_obj.outbox:
         print('sent messages')
         lobby.network_obj.transmit()

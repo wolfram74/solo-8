@@ -33,4 +33,4 @@ while True:
         print('got messages')
         msg = player.network_obj.inbox.pop(0)
         print(msg.payload)
-        getattr(player, msg.payload['message_id'])(msg)
+        getattr(player, msg.payload['message_type'])(msg)

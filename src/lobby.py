@@ -10,6 +10,7 @@ class Lobby:
         self.lobby_id = 121
         self.active_players = {}
         self.active_games = {}
+        self.last_message_id = 0
 
     def generate_player_id(self, message):
         next_player_id = self.last_player_id+1
@@ -31,11 +32,13 @@ class Lobby:
             'player_alias':message.payload['player_alias'],
             'player_address':message.payload['origin']
             }
+        self.last_message_id+=1
         self.network_obj.enque(Message({
             'destination':tuple(message.payload['origin']),
             'origin':self.network_obj.address,
-            'message_id':'set_player_id',
+            'message_type':'set_player_id',
             'player_id':next_player_id,
+            'message_id':self.last_message_id
             }))
         return next_player_id
 
