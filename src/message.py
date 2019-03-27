@@ -11,7 +11,7 @@ class Message():
         self.payload = payload
 
     def encode(self):
-        return encoding(vars(self))
+        return encoding(self.payload)
 
     def destination(self):
         return self.payload['destination']

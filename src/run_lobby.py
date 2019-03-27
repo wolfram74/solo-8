@@ -19,5 +19,7 @@ while True:
         print('got messages')
         msg = lobby.network_obj.inbox.pop(0)
         print(msg.payload)
+        getattr(lobby, msg.payload['message_id'])(msg)
+
 # lobby
 
