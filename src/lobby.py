@@ -9,6 +9,7 @@ class Lobby:
         self.game_id_step = int(kwargs['game_id_step'])
         self.lobby_id = 121
         self.active_players = {}
+        self.active_games = {}
 
     def generate_player_id(self, message):
         next_player_id = self.last_player_id+1
@@ -37,6 +38,14 @@ class Lobby:
             'player_id':next_player_id,
             }))
         return next_player_id
+
+    def generate_game_id(self):
+        next_game_id = self.last_game_id+self.game_id_step
+        if next_game_id == self.lobby_id:
+            next_game_id+= self.game_id_step
+        self.active_games[next] = {'players':[]}
+        self.last_game_id = next_game_id
+        return next_game_id
 
     def sender_id(self):
         return self.lobby_id
