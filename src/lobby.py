@@ -44,6 +44,7 @@ class Lobby:
     def start_new_game(self, message):
         # https://docs.python.org/3/library/subprocess.html
         # will likely be relevant
+        #subprocess.Popen
         # initiate new game server
         # enque game server assignment message to founder
         pass
