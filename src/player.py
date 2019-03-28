@@ -23,7 +23,7 @@ class Player:
             'message_type':'start_new_game',
             'player_id':self.player_id,
             'sender_id':self.sender_id()
-            'message_id':self.sender_id()
+            'message_id':self.last_message_id
             })
 
     def set_player_id(self, message):
