@@ -2,11 +2,12 @@ import socket
 from message import Message
 
 class NetworkIO():
-    def __init__(self, address):
+    def __init__(self, address=None):
         #address is ('ip',port_int)
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.address = address
-        self.socket.bind(address)
+        if address:
+            self.socket.bind(address)
         #binding might not be needed for player class
         self.inbox = []
         self.outbox = []
@@ -25,8 +26,11 @@ class NetworkIO():
         print('io:receiveing')
         data, address =self.socket.recvfrom(2**12)
         print('io: address field?', address)
+        new_message = Message.fromByteString(data)
+        if 'origin' not in new_message.payload.keys():
+            new_message.payload['origin'] = address
         self.inbox.append(
-            Message.fromByteString(data)
+            new_message
             )
 
     def enque(self,message):

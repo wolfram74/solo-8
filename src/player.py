@@ -14,7 +14,7 @@ class Player:
             'message_type':'generate_player_id',
             'player_alias': self.player_alias,
             'destination':self.lobby_address,
-            'origin':self.network_obj.address,
+            # 'origin':self.network_obj.address,
             'message_id':self.last_message_id
             })
         self.network_obj.enque(message)
@@ -58,6 +58,8 @@ class Player:
 
     def set_player_id(self, message):
         self.player_id = message.payload['player_id']
+        if self.network_obj.address == None:
+            self.network_obj.address = message.payload['destination']
         return self.player_id
 
     def sender_id(self):

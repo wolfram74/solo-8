@@ -8,12 +8,13 @@ from time import time
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-connection = NetworkIO(
-    (
-        config['DEV']['player_ip'],
-        int(config['DEV']['player_port'])
-        )
-    )
+# connection = NetworkIO(
+#     (
+#         config['DEV']['player_ip'],
+#         int(config['DEV']['player_port'])
+#         )
+#     )
+connection = NetworkIO()
 lobby_address =     (
     config['DEV']['lobby_ip'],
     int(config['DEV']['lobby_port'])
