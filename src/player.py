@@ -42,6 +42,7 @@ class Player:
         # test to see if game is receiving worked, so somehow player isn't sending
         # echo "This is my data" > /dev/udp/127.0.0.1/12018
         # ruled packet size limits
+        # ruled out sending to lobby accidentally because lobby would crash
         self.last_message_id+=1
         message = Message({
             'message_type':'add_new_player',
