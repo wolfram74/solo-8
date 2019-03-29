@@ -7,6 +7,7 @@ class NetworkIO():
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.address = address
         self.socket.bind(address)
+        #binding might not be needed for player class
         self.inbox = []
         self.outbox = []
 
