@@ -1,15 +1,15 @@
 import configparser
-from lobby import Lobby
+from game import Game
 from network_io import NetworkIO
 import select
 import sys
 
 address, port, game_id = sys.argv[1:]
 
-connection = NetworkIO((addres, int(port)))
+connection = NetworkIO((address, int(port)))
 
-game = Game(connection, {'game_id':int(game_id)})
-
+game = Game(connection, **{'game_id':int(game_id)})
+print('g:booting up game %d' % game.game_id)
 while True:
     readers, _, _ = select.select([game.network_obj.socket], [],[],0)
     for reader in readers:

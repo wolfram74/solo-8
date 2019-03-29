@@ -1,5 +1,6 @@
 from message_library import message_library
 from message import Message
+import subprocess
 
 class Lobby:
     def __init__(self, network_obj, **kwargs):
@@ -49,11 +50,11 @@ class Lobby:
 
         # initiate new game server
         new_game_id = self.generate_game_id()
-        adress = self.network_obj.address
-        addres[1]+=new_game_id
+        address = list(self.network_obj.address)
+        address[1]+=new_game_id
         subprocess.Popen(
             ['python3','run_game.py',
-            address[0], address[1], new_game_id]
+            address[0], str(address[1]), str(new_game_id)]
             )
 
         # enque game server assignment message to founder
