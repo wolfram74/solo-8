@@ -14,6 +14,7 @@ connection = NetworkIO(
     )
 lobby = Lobby(connection, **config['DEV'])
 
+print('l: ', lobby.network_obj.socket)
 while True:
     readers, _, _ = select.select([lobby.network_obj.socket], [],[],0)
     for reader in readers:

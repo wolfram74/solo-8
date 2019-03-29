@@ -12,12 +12,12 @@ class NetworkIO():
 
     def transmit(self):
         next_message = self.outbox.pop(0)
-        print('io:sending')
+        print('io:sending id:%d, dest: ' % next_message.payload['message_id'], next_message.destination())
         self.socket.sendto(
             next_message.encode(),
             next_message.destination()
             )
-
+        print('io: finished send')
     def recieve(self):
         print('io:recieveing')
         data, address =self.socket.recvfrom(2**12)

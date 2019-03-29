@@ -9,11 +9,13 @@ class Player:
         self.last_message_id = 0
 
     def request_player_id(self):
+        self.last_message_id+=1
         message = Message({
             'message_type':'generate_player_id',
             'player_alias': self.player_alias,
             'destination':self.lobby_address,
-            'origin':self.network_obj.address
+            'origin':self.network_obj.address,
+            'message_id':self.last_message_id
             })
         self.network_obj.enque(message)
 
