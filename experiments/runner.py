@@ -12,5 +12,9 @@ while True:
     loops+=1
     if loops < 4 and loops > 0:
         subprocess.Popen(
-            command_template % servers[loops]  , shell=True
+            ["python3", "sub_run.py", servers[loops]]
             )
+        #note: if the parent process ends without stopping the child processes they can't be stopped with a simple meta-c
+        #ps and kill can help
+    # if loops >6:
+    #     break

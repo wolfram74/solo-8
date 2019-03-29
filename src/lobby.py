@@ -41,14 +41,33 @@ class Lobby:
             'message_id':self.last_message_id
             }))
         return next_player_id
+
     def start_new_game(self, message):
         # https://docs.python.org/3/library/subprocess.html
         # will likely be relevant
         #subprocess.Popen
-        # initiate new game server
-        # enque game server assignment message to founder
-        pass
 
+        # initiate new game server
+        new_game_id = self.generate_game_id()
+        adress = self.network_obj.address
+        addres[1]+=new_game_id
+        subprocess.Popen(
+            ['python3','run_game.py',
+            address[0], address[1], new_game_id]
+            )
+
+        # enque game server assignment message to founder
+        self.last_message_id+=1
+        self.network_obj.enque(Message({
+            'destination':tuple(message.payload['origin']),
+            'origin':self.network_obj.address,
+            'game_address':address,
+            'game_id':new_game_id,
+            'message_type':'game_assignment',
+            'sender_id':self.sender_id(),
+            'message_id':self.last_message_id
+            }))
+        return new_game_id
     def generate_game_id(self):
         next_game_id = self.last_game_id+self.game_id_step
         if next_game_id == self.lobby_id:
