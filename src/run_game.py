@@ -15,7 +15,7 @@ print('g:', game.network_obj.socket)
 while True:
     readers, _, _ = select.select([game.network_obj.socket], [],[],0)
     for reader in readers:
-        game.network_obj.recieve()
+        game.network_obj.receive()
 
     if game.network_obj.inbox:
         print('g:got messages')

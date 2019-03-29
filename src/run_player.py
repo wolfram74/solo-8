@@ -28,7 +28,7 @@ benchmarks = [(1,'request_new_game')]
 while True:
     readers, _, _ = select.select([player.network_obj.socket], [],[],0)
     for reader in readers:
-        player.network_obj.recieve()
+        player.network_obj.receive()
 
     if player.network_obj.outbox:
         player.network_obj.transmit()

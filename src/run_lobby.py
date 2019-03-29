@@ -18,7 +18,7 @@ print('l: ', lobby.network_obj.socket)
 while True:
     readers, _, _ = select.select([lobby.network_obj.socket], [],[],0)
     for reader in readers:
-        lobby.network_obj.recieve()
+        lobby.network_obj.receive()
 
     if lobby.network_obj.inbox:
         print('got messages')

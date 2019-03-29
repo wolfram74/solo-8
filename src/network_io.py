@@ -13,13 +13,15 @@ class NetworkIO():
     def transmit(self):
         next_message = self.outbox.pop(0)
         print('io:sending id:%d, dest: ' % next_message.payload['message_id'], next_message.destination())
+        print('io:byte_length %d ' % len(next_message.encode()))
+        print('io:byte_str %s ' % next_message.encode())
         self.socket.sendto(
             next_message.encode(),
             next_message.destination()
             )
         print('io: finished send')
-    def recieve(self):
-        print('io:recieveing')
+    def receive(self):
+        print('io:receiveing')
         data, address =self.socket.recvfrom(2**12)
         print('io: address field?', address)
         self.inbox.append(

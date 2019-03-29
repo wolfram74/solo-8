@@ -38,10 +38,15 @@ class Player:
         self.request_join_game()
 
     def request_join_game(self):
+        #not getting received
+        # test to see if game is receiving worked, so somehow player isn't sending
+        # echo "This is my data" > /dev/udp/127.0.0.1/12018
+        # ruled packet size limits
         self.last_message_id+=1
         message = Message({
             'message_type':'add_new_player',
             'player_id':self.player_id,
+            'player_alias':self.player_alias,
             'destination':self.game_address,
             'origin':self.network_obj.address,
             'sender_id':self.sender_id(),
@@ -49,7 +54,6 @@ class Player:
             })
         print(message.payload)
         self.network_obj.enque(message)
-
 
     def set_player_id(self, message):
         self.player_id = message.payload['player_id']
