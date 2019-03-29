@@ -39,6 +39,5 @@ while True:
         print(msg.payload)
         getattr(player, msg.payload['message_type'])(msg)
     if benchmarks and time()-start_time > benchmarks[0][0]:
-    # if time()-start_time > benchmarks[0][0]:
         getattr(player,benchmarks[0][1])()
         benchmarks.pop(0)

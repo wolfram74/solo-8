@@ -10,6 +10,7 @@ connection = NetworkIO((address, int(port)))
 
 game = Game(connection, **{'game_id':int(game_id)})
 print('g:booting up game %d' % game.game_id)
+print('g:address ', game.network_obj.address)
 while True:
     readers, _, _ = select.select([game.network_obj.socket], [],[],0)
     for reader in readers:

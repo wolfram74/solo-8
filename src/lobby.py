@@ -52,6 +52,10 @@ class Lobby:
         new_game_id = self.generate_game_id()
         address = list(self.network_obj.address)
         address[1]+=new_game_id
+        # subprocess.Popen(
+        #     'python3 run_game.py %s %s %s' % (
+        #     address[0], str(address[1]), str(new_game_id)), shell=True
+        #     )
         subprocess.Popen(
             ['python3','run_game.py',
             address[0], str(address[1]), str(new_game_id)]

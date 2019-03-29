@@ -22,6 +22,7 @@ class Player:
         message = Message({
             'message_type':'start_new_game',
             'player_id':self.player_id,
+            'player_alias':self.player_alias,
             'destination':self.lobby_address,
             'origin':self.network_obj.address,
             'sender_id':self.sender_id(),
@@ -32,6 +33,20 @@ class Player:
     def game_assignment(self, message):
         self.game_id = message.payload['game_id']
         self.game_address = message.payload['game_address']
+        self.request_join_game()
+
+    def request_join_game(self):
+        self.last_message_id+=1
+        message = Message({
+            'message_type':'add_new_player',
+            'player_id':self.player_id,
+            'destination':self.game_address,
+            'origin':self.network_obj.address,
+            'sender_id':self.sender_id(),
+            'message_id':self.last_message_id
+            })
+        print(message.payload)
+        self.network_obj.enque(message)
 
 
     def set_player_id(self, message):

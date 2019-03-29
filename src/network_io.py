@@ -12,15 +12,16 @@ class NetworkIO():
 
     def transmit(self):
         next_message = self.outbox.pop(0)
-        print('sending')
+        print('io:sending')
         self.socket.sendto(
             next_message.encode(),
             next_message.destination()
             )
 
     def recieve(self):
-        print('recieveing')
+        print('io:recieveing')
         data, address =self.socket.recvfrom(2**12)
+        print('io: address field?', address)
         self.inbox.append(
             Message.fromByteString(data)
             )
