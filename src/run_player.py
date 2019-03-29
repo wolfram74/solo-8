@@ -4,6 +4,12 @@ from message import Message
 from network_io import NetworkIO
 import select
 from time import time
+import sys
+
+mode = 'DEV'
+if len(sys.argv)>1:
+    mode = sys.argv[1]
+
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -16,8 +22,8 @@ config.read('config.ini')
 #     )
 connection = NetworkIO()
 lobby_address =     (
-    config['DEV']['lobby_ip'],
-    int(config['DEV']['lobby_port'])
+    config[mode]['lobby_ip'],
+    int(config[mode]['lobby_port'])
     )
 
 player = Player(connection, lobby_address)

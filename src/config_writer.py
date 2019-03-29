@@ -11,7 +11,7 @@ config['DEV'] = {
 config['PROD'] = {
     'lobby_ip' : '45.55.178.89',
     'lobby_port' : '12001',
-    'game_id_step' : '17'
+    'game_id_step' : '19'
 }
 with open('config.ini', 'w') as configfile:
     config.write(configfile)

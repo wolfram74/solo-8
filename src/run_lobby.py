@@ -2,17 +2,22 @@ import configparser
 from lobby import Lobby
 from network_io import NetworkIO
 import select
+import sys
+
+mode = 'DEV'
+if len(sys.argv)>1:
+    mode = sys.argv[1]
 
 config = configparser.ConfigParser()
 config.read('config.ini')
 
 connection = NetworkIO(
     (
-        config['DEV']['lobby_ip'],
-        int(config['DEV']['lobby_port'])
+        config[mode]['lobby_ip'],
+        int(config[mode]['lobby_port'])
         )
     )
-lobby = Lobby(connection, **config['DEV'])
+lobby = Lobby(connection, **config[mode])
 
 print('l: ', lobby.network_obj.socket)
 while True:

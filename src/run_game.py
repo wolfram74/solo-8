@@ -4,6 +4,7 @@ from network_io import NetworkIO
 import select
 import sys
 
+
 address, port, game_id = sys.argv[1:]
 
 connection = NetworkIO((address, int(port)))
