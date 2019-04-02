@@ -6,13 +6,13 @@ import subprocess
 class Lobby:
     def __init__(self, network_obj, **kwargs):
         self.network_obj = network_obj
+        self.last_message_id = 0
         self.last_player_id = 0
         self.last_game_id = 0
         self.game_id_step = int(kwargs['game_id_step'])
         self.lobby_id = 121
         self.active_players = {}
         self.active_games = {}
-        self.last_message_id = 0
 
     def generate_player_id(self, message):
         next_player_id = self.last_player_id+1

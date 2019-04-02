@@ -6,10 +6,10 @@ import decorators
 class Player:
     def __init__(self, network_obj, lobby_address, player_alias='farts'):
         self.network_obj = network_obj
+        self.last_message_id = 0
         self.lobby_address = lobby_address
         self.player_alias = player_alias
         self.player_id = 0
-        self.last_message_id = 0
 
     def request_player_id(self):
         self.last_message_id+=1
