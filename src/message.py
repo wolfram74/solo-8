@@ -17,6 +17,10 @@ class Message():
     def destination(self):
         return tuple(self.payload['destination'])
 
+    def set_last_sent(self, stamp):
+        self.last_sent = stamp
+        return self.last_sent
+
     def m_uid(self):
         return (
             self.payload['message_type'],

@@ -1,5 +1,6 @@
 from message_library import message_library
 from message import Message
+import decorators
 import subprocess
 
 class Lobby:
@@ -29,17 +30,21 @@ class Lobby:
                 next_player_id += 1
             valid = (not game_col) and (not lob_col)
         self.last_player_id = next_player_id
+        print(next_player_id)
         self.active_players[next_player_id] = {
             'player_alias':message.payload['player_alias'],
             'player_address':message.payload['origin']
             }
         self.last_message_id+=1
         self.network_obj.enque(Message({
+            'player_id':next_player_id,
+            'response_to':message.m_uid(),
             'destination':tuple(message.payload['origin']),
             'origin':self.network_obj.address,
             'message_type':'set_player_id',
-            'player_id':next_player_id,
-            'message_id':self.last_message_id
+            'message_id':self.last_message_id,
+            # 'response_to':message.m_uid(),
+            'sender_id':self.sender_id()
             }))
         return next_player_id
 
@@ -52,10 +57,6 @@ class Lobby:
         new_game_id = self.generate_game_id()
         address = list(self.network_obj.address)
         address[1]+=new_game_id
-        # subprocess.Popen(
-        #     'python3 run_game.py %s %s %s' % (
-        #     address[0], str(address[1]), str(new_game_id)), shell=True
-        #     )
         subprocess.Popen(
             ['python3','run_game.py',
             address[0], str(address[1]), str(new_game_id)]
@@ -68,11 +69,13 @@ class Lobby:
             'origin':self.network_obj.address,
             'game_address':address,
             'game_id':new_game_id,
+            'response_to':message.m_uid(),
             'message_type':'game_assignment',
             'sender_id':self.sender_id(),
             'message_id':self.last_message_id
             }))
         return new_game_id
+
     def generate_game_id(self):
         next_game_id = self.last_game_id+self.game_id_step
         if next_game_id == self.lobby_id:
@@ -83,3 +86,18 @@ class Lobby:
 
     def sender_id(self):
         return self.lobby_id
+
+
+    def ack(self, message):
+        print('coolio')
+
+
+    @decorators.route
+    def send_ack(self, message):
+        # print('ack:',message.payload)
+        out_bound={
+        'response_to':message.m_uid(),
+        'destination':message.payload['origin'],
+        'message_type':'ack'
+        }
+        return Message(payload=out_bound, persist=False)

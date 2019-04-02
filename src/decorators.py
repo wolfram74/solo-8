@@ -1,10 +1,13 @@
 def route(route_to_be):
     #to be applied to classes with routes (lobby, player and game)
     #route methods take messages as inputs
-    def routified(message):
+    def routified(self, message):
+        # print('dec:', message, message.payload)
         self.last_message_id +=1
-        new_message = route_to_be(message)
-        new_message['message_id'] = self.last_message_id
-        new_message['sender_id'] = self.sender_id()
-        new_message['origin'] = self.network_obj.address
+        new_message = route_to_be(self, message)
+        new_message.payload['message_id'] = self.last_message_id
+        new_message.payload['sender_id'] = self.sender_id()
+        new_message.payload['origin'] = self.network_obj.address
         self.network_obj.enque(new_message)
+        return message
+    return routified

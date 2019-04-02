@@ -37,14 +37,19 @@ while True:
     for reader in readers:
         player.network_obj.receive()
 
-    if player.network_obj.outbox:
-        player.network_obj.transmit()
 
     if player.network_obj.inbox:
         print('got messages')
         msg = player.network_obj.inbox.pop(0)
         print(msg.payload)
         getattr(player, msg.payload['message_type'])(msg)
+
+    if player.network_obj.persistent_messages:
+        player.network_obj.retry_persistent_messages()
+
+    if player.network_obj.outbox:
+        player.network_obj.transmit()
+
     if benchmarks and time()-start_time > benchmarks[0][0]:
         getattr(player,benchmarks[0][1])()
         benchmarks.pop(0)

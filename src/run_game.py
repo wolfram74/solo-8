@@ -23,6 +23,9 @@ while True:
         msg = game.network_obj.inbox.pop(0)
         # print(msg.payload)
         getattr(game, msg.payload['message_type'])(msg)
+    if game.network_obj.persistent_messages:
+        game.network_obj.retry_persistent_messages()
+
     if game.network_obj.outbox:
         print('g:sent messages')
         game.network_obj.transmit()
