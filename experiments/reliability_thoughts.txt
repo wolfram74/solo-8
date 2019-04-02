@@ -1,0 +1,10 @@
+problem: some messages have trouble getting to destinations the first time
+possible solution:
+	messages have a persistent tag
+	these get added to the network objects persistent_messages dict
+	messages have a unique ID across all objects with (message_type, sender_id, message_id)
+	messages that are responses to particular other messages have a response_to field specifying which message they are responding to
+	when a network_obj receives a message with a valid response_to field, it can take the appropriate message out of the persistent_messages dict
+	persistence is enforced by giving messages a time of last send field
+	periodically the network obj iterates over the persistent_messages dict, and if more than the retry period has elapsed, it'll retry
+	since network_objs are now potentially sending duplicate messages, keep track of a set of received objects
