@@ -3,14 +3,14 @@ import subprocess
 import time
 loops = 0
 
-servers = ['','farts', 'glamdring', 'flebulon']
+servers = ['','farts']
 command_template = 'python3 sub_run.py %s'
 
 while True:
-    print('loop %d' %loops)
+    # print('loop %d' %loops)
     time.sleep(2)
     loops+=1
-    if loops < 4 and loops > 0:
+    if loops < 2 and loops > 0:
         subprocess.Popen(
             ["python3", "sub_run.py", servers[loops]]
             )

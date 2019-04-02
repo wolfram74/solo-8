@@ -1,5 +1,6 @@
 from message_library import message_library
 from message import Message
+import time
 
 class Player:
     def __init__(self, network_obj, lobby_address, player_alias='farts'):
@@ -54,6 +55,7 @@ class Player:
             'message_id':self.last_message_id
             })
         print(message.payload)
+        time.sleep(.5)
         self.network_obj.enque(message)
 
     def set_player_id(self, message):
