@@ -10,6 +10,7 @@ config['DEV'] = {
 
 config['PROD'] = {
     'lobby_ip' : '54.214.53.85',
+    # 'lobby_ip' : '172.31.24.81',
     'lobby_port' : '12001',
     'game_id_step' : '19'
 }

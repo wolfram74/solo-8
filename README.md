@@ -8,4 +8,12 @@ echo '{"message_id": 1, "message_type": "generate_player_id", "destination": ["4
 
 echo "foo" | nc -w1 -u 45.55.178.89 12001
 nmap -p 11000-12010 45.55.178.89
+droplet
 nmap -sUV 45.55.178.89 -p 11999-12010
+ec2?
+nmap -sUV 54.214.53.85 -p 11999-12010
+echo "foo" | nc -w1 -u 54.214.53.85 12001
+ec2?
+nmap -sUV 172.31.24.81 -p 11999-12010
+
+54.214.53.85:12001
