@@ -1,12 +1,12 @@
 from message_library import message_library
 from message import Message
+from controller import Controller
 import time
 import decorators
 
-class Player:
-    def __init__(self, network_obj, lobby_address, player_alias='farts'):
-        self.network_obj = network_obj
-        self.last_message_id = 0
+class Player(Controller):
+    def __init__(self, network_obj, lobby_address, player_alias='farts', **kwargs):
+        super().__init__(network_obj, **kwargs)
         self.lobby_address = lobby_address
         self.player_alias = player_alias
         self.player_id = 0
@@ -66,16 +66,3 @@ class Player:
 
     def sender_id(self):
         return self.player_id
-
-    def ack(self, message):
-        print('coolio')
-
-    @decorators.route
-    def send_ack(self, message):
-        # print('ack:',message.payload)
-        out_bound={
-        'response_to':message.m_uid(),
-        'destination':message.payload['origin'],
-        'message_type':'ack'
-        }
-        return Message(payload=out_bound, persist=False)

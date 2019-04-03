@@ -1,12 +1,12 @@
 from message_library import message_library
 from message import Message
+from controller import Controller
 import decorators
 import subprocess
 
-class Lobby:
+class Lobby(Controller):
     def __init__(self, network_obj, **kwargs):
-        self.network_obj = network_obj
-        self.last_message_id = 0
+        super().__init__(network_obj, **kwargs)
         self.last_player_id = 0
         self.last_game_id = 0
         self.game_id_step = int(kwargs['game_id_step'])
@@ -86,18 +86,3 @@ class Lobby:
 
     def sender_id(self):
         return self.lobby_id
-
-
-    def ack(self, message):
-        print('coolio')
-
-
-    @decorators.route
-    def send_ack(self, message):
-        # print('ack:',message.payload)
-        out_bound={
-        'response_to':message.m_uid(),
-        'destination':message.payload['origin'],
-        'message_type':'ack'
-        }
-        return Message(payload=out_bound, persist=False)

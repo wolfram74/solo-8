@@ -1,0 +1,19 @@
+problem:
+	several places have redundant code
+		the runners are very similar in many ways
+			all have a loop checking
+				socket for new data
+				outbox for things to send
+				persistent messages to resend
+			initialize the salient object
+		the main objects have a number of similarities
+			keep track of last message ids
+			have a send_ack route
+			have an ack method
+		many routes have a few properties that are always exhibit
+routes need to be re-written to take advantage of route-decorator
+possible solution at object and runner level:
+	a parent controller class with
+		a class method #start_loop
+		init that sets up
+			last_message_id
