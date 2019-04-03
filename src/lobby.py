@@ -15,20 +15,7 @@ class Lobby(Controller):
         self.active_games = {}
 
     def generate_player_id(self, message):
-        next_player_id = self.last_player_id+1
-        valid = False
-        while not valid:
-            game_col = True
-            lob_col = True
-            if not next_player_id%self.game_id_step==0:
-                game_col = False
-            else:
-                next_player_id+=1
-            if not next_player_id == self.lobby_id:
-                lob_col = False
-            else:
-                next_player_id += 1
-            valid = (not game_col) and (not lob_col)
+        next_player_id = self.gen_new_player_id()
         self.last_player_id = next_player_id
         print(next_player_id)
         self.active_players[next_player_id] = {
@@ -83,6 +70,23 @@ class Lobby(Controller):
         self.active_games[next] = {'players':[]}
         self.last_game_id = next_game_id
         return next_game_id
+
+    def gen_new_player_id(self):
+        next_player_id = self.last_player_id+1
+        valid = False
+        while not valid:
+            game_col = True
+            lob_col = True
+            if not next_player_id%self.game_id_step==0:
+                game_col = False
+            else:
+                next_player_id+=1
+            if not next_player_id == self.lobby_id:
+                lob_col = False
+            else:
+                next_player_id += 1
+            valid = (not game_col) and (not lob_col)
+        return next_player_id
 
     def sender_id(self):
         return self.lobby_id
