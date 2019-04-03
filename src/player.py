@@ -11,51 +11,42 @@ class Player(Controller):
         self.player_alias = player_alias
         self.player_id = 0
 
+
+    @decorators.route
     def request_player_id(self):
-        self.last_message_id+=1
         message = Message({
             'message_type':'generate_player_id',
             'player_alias': self.player_alias,
             'destination':self.lobby_address,
-            'message_id':self.last_message_id,
-            'sender_id':self.sender_id()
             })
-        self.network_obj.enque(message)
+        return message
 
+    @decorators.route
     def request_new_game(self):
-        self.last_message_id+=1
         message = Message({
             'message_type':'start_new_game',
             'player_id':self.player_id,
             'player_alias':self.player_alias,
             'destination':self.lobby_address,
-            'origin':self.network_obj.address,
-            'sender_id':self.sender_id(),
-            'message_id':self.last_message_id
             })
-        self.network_obj.enque(message)
+        return message
 
     def game_assignment(self, message):
         self.game_id = message.payload['game_id']
         self.game_address = message.payload['game_address']
         self.send_ack(message)
-        self.request_join_game()
+        self.request_join_game(message)
 
-    def request_join_game(self):
-        #is sensitive to timing
-        self.last_message_id+=1
+
+    @decorators.route
+    def request_join_game(self, message):
         message = Message({
             'message_type':'add_new_player',
             'player_id':self.player_id,
             'player_alias':self.player_alias,
             'destination':self.game_address,
-            'origin':self.network_obj.address,
-            'sender_id':self.sender_id(),
-            'message_id':self.last_message_id
             })
-        print(message.payload)
-        # time.sleep(.5)
-        self.network_obj.enque(message)
+        return message
 
     def set_player_id(self, message):
         self.player_id = message.payload['player_id']

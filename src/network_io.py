@@ -36,10 +36,13 @@ class NetworkIO():
     def receive(self):
         # print('io:receiveing')
         data, address =self.socket.recvfrom(2**12)
-        # print('io: address field?', address)
+        print('io: address field?', address)
         new_message = Message.fromByteString(data)
         if 'origin' not in new_message.payload.keys():
             new_message.payload['origin'] = address
+        if new_message.payload['origin'] == None:
+            new_message.payload['origin'] = address
+
         self.seen_messages.add(new_message.m_uid())
         if 'response_to' in new_message.payload.keys():
             del self.persistent_messages[tuple(new_message.payload['response_to'])]

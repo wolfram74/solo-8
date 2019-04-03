@@ -34,6 +34,8 @@ while True:
             print('l: invalid method call caught')
         except:
             print('l: something weird happened on receipt')
+            print(msg.payload)
+            print('')
     if lobby.network_obj.persistent_messages:
         lobby.network_obj.retry_persistent_messages()
     if lobby.network_obj.outbox:

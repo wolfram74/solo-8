@@ -31,6 +31,7 @@ class Lobby(Controller):
             })
         return outbound
 
+    @decorators.route
     def start_new_game(self, message):
         # https://docs.python.org/3/library/subprocess.html
         # will likely be relevant
@@ -46,18 +47,14 @@ class Lobby(Controller):
             )
 
         # enque game server assignment message to founder
-        self.last_message_id+=1
-        self.network_obj.enque(Message({
+        outbound = Message({
             'destination':tuple(message.payload['origin']),
-            'origin':self.network_obj.address,
             'game_address':address,
             'game_id':new_game_id,
             'response_to':message.m_uid(),
             'message_type':'game_assignment',
-            'sender_id':self.sender_id(),
-            'message_id':self.last_message_id
-            }))
-        return new_game_id
+            })
+        return outbound
 
     def generate_game_id(self):
         next_game_id = self.last_game_id+self.game_id_step
