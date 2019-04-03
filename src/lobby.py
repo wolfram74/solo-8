@@ -14,6 +14,7 @@ class Lobby(Controller):
         self.active_players = {}
         self.active_games = {}
 
+    @decorators.route
     def generate_player_id(self, message):
         next_player_id = self.gen_new_player_id()
         self.last_player_id = next_player_id
@@ -22,18 +23,12 @@ class Lobby(Controller):
             'player_alias':message.payload['player_alias'],
             'player_address':message.payload['origin']
             }
-        self.last_message_id+=1
-        self.network_obj.enque(Message({
-            'player_id':next_player_id,
+        outbound = Message({
             'response_to':message.m_uid(),
             'destination':tuple(message.payload['origin']),
-            'origin':self.network_obj.address,
             'message_type':'set_player_id',
-            'message_id':self.last_message_id,
-            # 'response_to':message.m_uid(),
-            'sender_id':self.sender_id()
-            }))
-        return next_player_id
+            })
+        return outbound
 
     def start_new_game(self, message):
         # https://docs.python.org/3/library/subprocess.html
