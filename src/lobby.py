@@ -26,6 +26,7 @@ class Lobby(Controller):
         outbound = Message({
             'response_to':message.m_uid(),
             'destination':tuple(message.payload['origin']),
+            'player_id':next_player_id,
             'message_type':'set_player_id',
             })
         return outbound
