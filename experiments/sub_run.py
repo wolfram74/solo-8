@@ -16,3 +16,6 @@ while True:
         data, address =connection.recvfrom(2**12)
     if data:
         print(data, address)
+
+if __name__ == '__main__':
+    print('howdy do')

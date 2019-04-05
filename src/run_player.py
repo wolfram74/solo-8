@@ -14,12 +14,6 @@ if len(sys.argv)>1:
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-# connection = NetworkIO(
-#     (
-#         config['DEV']['player_ip'],
-#         int(config['DEV']['player_port'])
-#         )
-#     )
 connection = NetworkIO()
 lobby_address =     (
     config[mode]['lobby_ip'],

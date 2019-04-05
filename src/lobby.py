@@ -1,8 +1,10 @@
+import decorators
+import subprocess
+import sys
+import configparser
 from message_library import message_library
 from message import Message
 from controller import Controller
-import decorators
-import subprocess
 
 class Lobby(Controller):
     def __init__(self, network_obj, **kwargs):
@@ -83,3 +85,20 @@ class Lobby(Controller):
 
     def sender_id(self):
         return self.lobby_id
+
+
+    @classmethod
+    def set_up_controller(cls):
+        mode = 'DEV'
+        if len(sys.argv)>1:
+            mode = sys.argv[1]
+
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+
+        connection = NetworkIO((
+            config[mode]['lobby_ip'],
+            int(config[mode]['lobby_port'])
+        ))
+        return Lobby(connection, **config[mode])
+
