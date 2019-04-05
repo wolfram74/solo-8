@@ -2,8 +2,8 @@ import decorators
 import subprocess
 import sys
 import configparser
-from message_library import message_library
 from message import Message
+from network_io import NetworkIO
 from controller import Controller
 
 class Lobby(Controller):
@@ -102,3 +102,7 @@ class Lobby(Controller):
         ))
         return Lobby(connection, **config[mode])
 
+if __name__ == '__main__':
+    lobby = Lobby.set_up_controller()
+    while True:
+        lobby.primary_loop()

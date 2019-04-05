@@ -30,7 +30,7 @@ class Controller:
         self.process_outbox()
 
     def get_readers(self):
-        readers, _, _ = select.select([player.network_obj.socket], [],[],0)
+        readers, _, _ = select.select([self.network_obj.socket], [],[],0)
         return readers
 
     def parse_readers(self, readers):
@@ -54,11 +54,11 @@ class Controller:
                 print('miscompiled message')
 
     def query_persistent_messages(self):
-        if lobby.network_obj.persistent_messages:
-            lobby.network_obj.retry_persistent_messages()
+        if self.network_obj.persistent_messages:
+            self.network_obj.retry_persistent_messages()
 
     def process_outbox(self):
-        if lobby.network_obj.outbox:
+        if self.network_obj.outbox:
             print('sent messages')
-            lobby.network_obj.transmit()
+            self.network_obj.transmit()
 
