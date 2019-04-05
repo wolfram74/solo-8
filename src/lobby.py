@@ -20,7 +20,7 @@ class Lobby(Controller):
     def generate_player_id(self, message):
         next_player_id = self.gen_new_player_id()
         self.last_player_id = next_player_id
-        print(next_player_id)
+        # print(next_player_id)
         self.active_players[next_player_id] = {
             'player_alias':message.payload['player_alias'],
             'player_address':message.payload['origin']
@@ -90,7 +90,7 @@ class Lobby(Controller):
     @classmethod
     def set_up_controller(cls):
         mode = 'DEV'
-        if len(sys.argv)>1:
+        if len(sys.argv)>1 and sys.argv[1]=='PROD':
             mode = sys.argv[1]
 
         config = configparser.ConfigParser()
