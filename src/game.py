@@ -34,3 +34,20 @@ class Game(Controller):
 
     def sender_id(self):
         return self.game_id
+
+
+    @classmethod
+    def set_up_controller(cls):
+        address, port, game_id = sys.argv[1:]
+
+        connection = NetworkIO((address, int(port)))
+
+        game = Game(connection, **{'game_id':int(game_id)})
+        print('g:booting up game %d' % game.game_id)
+        print('g:address ', game.network_obj.address)
+        return game
+
+if __name__ == '__main__':
+    game = Game.set_up_controller()
+    while True:
+        game.primary_loop()

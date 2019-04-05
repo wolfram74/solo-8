@@ -44,7 +44,7 @@ class Lobby(Controller):
         address = list(self.network_obj.address)
         address[1]+=new_game_id
         subprocess.Popen(
-            ['python3','run_game.py',
+            ['python3','game.py',
             address[0], str(address[1]), str(new_game_id)]
             )
 
