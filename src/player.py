@@ -1,8 +1,12 @@
+import time
+import decorators
+import sys
+import select
+import configparser
 from message_library import message_library
 from message import Message
 from controller import Controller
-import time
-import decorators
+from network_io import NetworkIO
 
 class Player(Controller):
     def __init__(self, network_obj, lobby_address, player_alias='farts', **kwargs):
@@ -57,3 +61,30 @@ class Player(Controller):
 
     def sender_id(self):
         return self.player_id
+
+
+    def get_readers(self):
+        readers, _, _ = select.select([self.network_obj.socket, sys.stdin], [],[],0)
+        return readers
+
+    @classmethod
+    def set_up_controller(cls):
+        mode = 'DEV'
+        if len(sys.argv)>1:
+            mode = sys.argv[1]
+
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+
+        connection = NetworkIO()
+        lobby_address =(
+            config[mode]['lobby_ip'],
+            int(config[mode]['lobby_port'])
+        )
+
+        return Player(connection, lobby_address)
+
+if __name__ == '__main__':
+    player = Player.set_up_controller()
+    while True:
+        player.primary_loop()
