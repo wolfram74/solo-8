@@ -59,4 +59,18 @@ class TestNetworkObjBehavior(unittest.TestCase):
         self.assertEqual(len(self.network_obj.seen_messages), 1)
 
     def testEndPersistence(self):
-        pass
+        self.network_obj.enque(self.dumby_message)
+        self.network_obj.transmit()
+        self.network_obj.receive()
+        self.assertEqual(len(self.network_obj.persistent_messages),1)
+        stop_message = copy.copy(self.dumby_message)
+        stop_message.payload['response_to']=self.dumby_message.m_uid()
+        stop_message.payload['message_id']=4
+        stop_message.payload['sender_id']=121
+        stop_message.payload['message_type']='ack'
+        stop_message.persistent= False
+        self.network_obj.enque(stop_message)
+        self.network_obj.transmit()
+        self.network_obj.receive()
+        self.assertEqual(len(self.network_obj.persistent_messages),0)
+

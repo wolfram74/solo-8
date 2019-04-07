@@ -17,11 +17,6 @@ class NetworkIO():
 
     def transmit(self):
         next_message = self.outbox.pop(0)
-        # print('io:sending id:%d, dest: ' % next_message.payload['message_id'], next_message.destination())
-        # print('io:byte_length %d ' % len(next_message.encode()))
-        # print('io:byte_str %s ' % next_message.encode())
-        # print(next_message)
-        # print(next_message.payload)
         m_uid = next_message.m_uid()
         next_message.set_last_sent(time())
         if next_message.persistent:
@@ -31,12 +26,11 @@ class NetworkIO():
             next_message.encode(),
             next_message.destination()
             )
-        # print('io: finished send')
 
     def receive(self):
         # print('io:receiveing')
         data, address =self.socket.recvfrom(2**12)
-        print('io: address field?', address)
+        # print('io: address field?', address)
         new_message = Message.fromByteString(data)
         if 'origin' not in new_message.payload.keys():
             new_message.payload['origin'] = address
@@ -50,6 +44,7 @@ class NetworkIO():
 
         self.seen_messages.add(new_message.m_uid())
         if 'response_to' in new_message.payload.keys():
+            # print('response', new_message.payload)
             del self.persistent_messages[tuple(new_message.payload['response_to'])]
         self.inbox.append(
             new_message
