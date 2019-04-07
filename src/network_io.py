@@ -43,6 +43,11 @@ class NetworkIO():
         if new_message.payload['origin'] == None:
             new_message.payload['origin'] = address
 
+        is_repeat = self.check_for_repeat(new_message)
+        if is_repeat:
+            self.deter_repeat_messages(new_message)
+            return
+
         self.seen_messages.add(new_message.m_uid())
         if 'response_to' in new_message.payload.keys():
             del self.persistent_messages[tuple(new_message.payload['response_to'])]
@@ -53,6 +58,12 @@ class NetworkIO():
     def enque(self,message):
         self.outbox.append(message)
 
+    def check_for_repeat(self, message):
+        if message.payload['sender_id']==0:
+            return False
+        if message.m_uid() in self.seen_messages:
+            return True
+        return False
 
     def retry_persistent_messages(self):
         now = time()
@@ -61,3 +72,17 @@ class NetworkIO():
             if delta > self.retry_time:
                 print(delta, self.persistent_messages[m_uid].payload)
                 self.enque(self.persistent_messages[m_uid])
+
+
+    def deter_repeat_messages(self,message):
+        print('io:dupe message')
+        stop_message = Message({
+            'response_to': message.m_uid(),
+            'message_type': 'ack',
+            'sender_id': 0,
+            'message_id': 0,
+            'origin':self.address,
+            'destination':message.payload['origin'],
+            })
+        self.enque(stop_message)
+
