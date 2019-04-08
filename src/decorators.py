@@ -1,6 +1,7 @@
 def route(route_to_be):
     #to be applied to classes with routes (lobby, player and game)
-    #route methods take messages as inputs
+    #route methods take messages as inputs and have message outputs
+    #methods that end by calling send_ack, while can be invoked by new messages, should not be designated as routes
     def routified(self, message=None):
         # print('dec:', message, message.payload)
         self.last_message_id +=1
@@ -15,3 +16,4 @@ def route(route_to_be):
         self.network_obj.enque(new_message)
         return message
     return routified
+#possible TODO: make new "terminus_route" decorator

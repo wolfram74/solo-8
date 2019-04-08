@@ -16,6 +16,8 @@ class Player(Controller):
         self.player_id = 0
         self.game_id = None
         self.game_address = None
+        self.secret_word=''
+        self.visible_letters=0
 
     @decorators.route
     def request_player_id(self):
@@ -62,6 +64,11 @@ class Player(Controller):
             })
         return outbound
 
+    def receive_new_secret_word(self, message):
+        self.secret_word = message.payload['secret_word']
+        self.visible_letters = 1
+        self.send_ack(message)
+
     def set_player_id(self, message):
         self.player_id = message.payload['player_id']
         if self.network_obj.address == None:
@@ -71,6 +78,9 @@ class Player(Controller):
 
     def sender_id(self):
         return self.player_id
+
+    def visible_word(self):
+        return self.secret_word[:self.visible_letters]
 
     def get_readers(self):
         readers, _, _ = select.select([self.network_obj.socket, sys.stdin], [],[],0)
