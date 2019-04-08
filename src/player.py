@@ -52,6 +52,11 @@ class Player(Controller):
             })
         return message
 
+    @decorators.route
+    def submit_secret_word(self, message):
+
+        return Message({})
+
     def set_player_id(self, message):
         self.player_id = message.payload['player_id']
         if self.network_obj.address == None:
@@ -62,7 +67,6 @@ class Player(Controller):
     def sender_id(self):
         return self.player_id
 
-
     def get_readers(self):
         readers, _, _ = select.select([self.network_obj.socket, sys.stdin], [],[],0)
         return readers
@@ -70,7 +74,8 @@ class Player(Controller):
     @classmethod
     def set_up_controller(cls):
         mode = 'DEV'
-        if len(sys.argv)>1:
+        ignored_args = ['-v']
+        if len(sys.argv)>1 and sys.argv[1] not in ignored_args:
             mode = sys.argv[1]
 
         config = configparser.ConfigParser()
