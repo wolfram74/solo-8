@@ -26,9 +26,10 @@ class Game(Controller):
             'player_address': new_address,
         }
         self.send_ack(message)
-        self.update_bulk_state(new_id)
+        self.update_bulk_state(message)
 
-    def update_bulk_state(self, player_id):
+    @decorators.route
+    def update_bulk_state(self, message):
         #we'll get to it after figuring out remote IP addressing
         pass
 
