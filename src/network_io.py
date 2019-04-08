@@ -45,7 +45,10 @@ class NetworkIO():
         self.seen_messages.add(new_message.m_uid())
         if 'response_to' in new_message.payload.keys():
             # print('response', new_message.payload)
-            del self.persistent_messages[tuple(new_message.payload['response_to'])]
+            if tuple(new_message.payload['response_to']) in self.persistent_messages:
+                del self.persistent_messages[
+                    tuple(new_message.payload['response_to'])
+                    ]
         self.inbox.append(
             new_message
             )

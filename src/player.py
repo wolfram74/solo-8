@@ -14,7 +14,8 @@ class Player(Controller):
         self.lobby_address = lobby_address
         self.player_alias = player_alias
         self.player_id = 0
-
+        self.game_id = None
+        self.game_address = None
 
     @decorators.route
     def request_player_id(self):
@@ -54,8 +55,12 @@ class Player(Controller):
 
     @decorators.route
     def submit_secret_word(self, message):
-
-        return Message({})
+        outbound = Message({
+            'message_type':'distribute_secret_word',
+            'secret_word':message.payload['secret_word'],
+            'destination':self.game_address,
+            })
+        return outbound
 
     def set_player_id(self, message):
         self.player_id = message.payload['player_id']

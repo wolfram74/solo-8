@@ -39,7 +39,9 @@ class TestPlayerRoutes(unittest.TestCase):
 
     @unittest.skip('deferred')
     def testReceiveNewSecretWord(self):
-        pass
+        self.message_in.payload['message_type']='receive_new_secret_word'
+        self.message_in.payload['secret_word']='quine'
+
 
     @unittest.skip('deferred')
     def testSubmitGuess(self):
