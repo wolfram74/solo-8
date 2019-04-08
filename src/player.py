@@ -10,7 +10,7 @@ from network_io import NetworkIO
 
 class Player(Controller):
     def __init__(self, network_obj, lobby_address, player_alias='farts', **kwargs):
-            super().__init__(network_obj, **kwargs)
+        super().__init__(network_obj, **kwargs)
         self.lobby_address = lobby_address
         self.player_alias = player_alias
         self.player_id = 0
