@@ -41,6 +41,14 @@ class TestPlayerRoutes(unittest.TestCase):
     def testReceiveNewSecretWord(self):
         self.message_in.payload['message_type']='receive_new_secret_word'
         self.message_in.payload['secret_word']='quine'
+        self.assertTrue(
+            len(self.player.network_obj.outbox)==1)
+        self.assertEqual(
+            self.player.network_obj.outbox[0].payload['message_type'],
+            'ack'
+            )
+        self.assertEqual(self.player.secret_word = 'quine')
+        self.assertEqual(self.player.visible_word = 'q')
 
 
     @unittest.skip('deferred')
