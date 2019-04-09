@@ -47,4 +47,3 @@ class TestGameRoutes(unittest.TestCase):
             self.game.network_obj.outbox[0].payload['destination'],
             self.game.network_obj.outbox[1].payload['destination']
             )
-        self.assert

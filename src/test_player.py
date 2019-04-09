@@ -51,10 +51,18 @@ class TestPlayerRoutes(unittest.TestCase):
         self.assertEqual(self.player.visible_word(), 'q')
         self.assertEqual(self.player.visible_letters, 1)
 
-
-    @unittest.skip('deferred')
     def testSubmitGuess(self):
-        pass
+        self.message_in.payload['message_type'] = 'submit_guess'
+        self.message_in.payload['guess_word'] = 'query'
+        self.message_in.payload['guess_clue'] = 'asking about something'
+        self.message_in.payload['sender_id'] = 't'
+        self.player.submit_guess(self.message_in)
+        self.assertTrue(len(self.network_obj.outbox)==1)
+        self.assertEqual(
+            self.player.network_obj.outbox[0].payload['message_type'],
+            'distribute_guess'
+            )
+
 
     @unittest.skip('deferred')
     def testReceiveNewGuess(self):
