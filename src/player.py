@@ -18,6 +18,7 @@ class Player(Controller):
         self.game_address = None
         self.secret_word=''
         self.visible_letters=0
+        self.active_cles = {}
 
     @decorators.route
     def request_player_id(self):
@@ -64,6 +65,11 @@ class Player(Controller):
             })
         return outbound
 
+    def receive_new_secret_word(self, message):
+        self.secret_word = message.payload['secret_word']
+        self.visible_letters = 1
+        self.send_ack(message)
+
     @decorators.route
     def submit_guess(self, message):
         outbound = Message({
@@ -75,10 +81,8 @@ class Player(Controller):
             })
         return outbound
 
-    def receive_new_secret_word(self, message):
-        self.secret_word = message.payload['secret_word']
-        self.visible_letters = 1
-        self.send_ack(message)
+    def receive_new_guess(self, message):
+        self.
 
     def set_player_id(self, message):
         self.player_id = message.payload['player_id']
