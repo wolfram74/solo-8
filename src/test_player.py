@@ -79,9 +79,17 @@ class TestPlayerRoutes(unittest.TestCase):
             'ack'
             )
 
-    @unittest.skip('deferred')
     def testSubmitContact(self):
-        pass
+        self.message_in.payload['message_type'] = 'submit_contact'
+        self.message_in.payload['contact_guess'] = 'question'
+        self.message_in.payload['guess_id'] = 1
+        self.message_in.payload['sender_id'] = 't'
+        self.player.submit_contact(self.message_in)
+        self.assertTrue(len(self.player.network_obj.outbox)==1)
+        self.assertEqual(
+            self.player.network_obj.outbox[0].payload['message_type'],
+            'distribute_contact'
+            )
 
     @unittest.skip('deferred')
     def testReceiveContactNotification(self):
