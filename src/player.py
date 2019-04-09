@@ -100,6 +100,9 @@ class Player(Controller):
             })
         return outbound
 
+    def receive_contact_notification(self, message):
+        pass
+
     def set_player_id(self, message):
         self.player_id = message.payload['player_id']
         # print('!!! player ID set\n')
