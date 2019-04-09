@@ -57,6 +57,23 @@ class Game(Controller):
             })
         return outbound
 
+    @decorators.game_multicast_route
+    def distribute_contact(self, message):
+        guess_id = message.payload['guess_id']
+        self.active_guesses[guess_id]['contacts'].append(
+            (
+                message.payload['sender_id'],
+                self.active_players[message.payload['sender_id']]['player_alias'],
+                message.payload['contact_guess'],
+                )
+            )
+        outbound = Message({
+            'message_type':'receive_notification',
+            'guess_id':guess_id,
+            'player_alias': self.active_players[message.payload['sender_id']]
+            })
+        return outbound
+
     def sender_id(self):
         return self.game_id
 
