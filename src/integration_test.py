@@ -9,8 +9,10 @@ def fake_new_game(player_obj):
     pass
 
 def fake_submit_word(player_obj):
-    player.network_obj.enque(Message({
+    player.network_obj.inbox.append(Message({
         'message_type':'submit_secret_word',
+        'sender_id':0,
+        'message_id':0,
         'secret_word':'quine'
         }))
     pass
@@ -23,8 +25,8 @@ if __name__ == '__main__':
     player.request_player_id()
     start_time = time()
     benchmarks = [
-    (1,fake_new_game),
-    # (3,fake_submit_word),
+    (2,fake_new_game),
+    (4,fake_submit_word),
     ]
     while True:
         player.primary_loop()

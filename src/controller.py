@@ -44,12 +44,15 @@ class Controller:
         try:
             getattr(self, msg.payload['message_type'])(msg)
         except AttributeError:
-            print('invalid method call caught on %d' % self.sender_id() )
-        except:
-            print('something weird happened on %d' %self.sender_id())
+            print('\n!!!invalid method call caught on %d' % self.sender_id() )
+            # print(dir(self))
+            print(msg.payload, '\n')
+        except Exception as inst:
+            print('\n!!!something weird happened on %d' %self.sender_id())
+            print(type(inst))
             try:
                 print('pathological message')
-                print(msg.payload)
+                print(msg.payload,'\n')
             except:
                 print('miscompiled message')
 

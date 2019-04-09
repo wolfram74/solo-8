@@ -26,12 +26,20 @@ class Game(Controller):
             'player_address': new_address,
         }
         self.send_ack(message)
-        self.update_bulk_state(message)
+        # self.update_bulk_state(message)
 
     @decorators.route
     def update_bulk_state(self, message):
         #we'll get to it after figuring out remote IP addressing
         pass
+
+    @decorators.game_multicast_route
+    def distribute_secret_word(self,message):
+        outbound = Message({
+            'message_type':'receive_new_secret_word',
+            'secret_word':message.payload['secret_word'],
+            })
+        return outbound
 
     def sender_id(self):
         return self.game_id
@@ -39,8 +47,10 @@ class Game(Controller):
 
     @classmethod
     def set_up_controller(cls):
-        address, port, game_id = sys.argv[1:]
-
+        if len(sys.argv) > 2:
+            address, port, game_id = sys.argv[1:]
+        else:
+            address, port, game_id = "127.0.0.1" ,12018,17
         connection = NetworkIO((address, int(port)))
 
         game = Game(connection, **{'game_id':int(game_id)})
