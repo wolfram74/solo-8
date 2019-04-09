@@ -61,3 +61,23 @@ class TestGameRoutes(unittest.TestCase):
             len(self.game.network_obj.outbox)
             )
 
+    def testDistributeContact(self):
+        self.message_in.payload['message_type']='distribute_guess'
+        self.message_in.payload['guess_word'] = 'query'
+        self.message_in.payload['guess_clue'] = 'asking about something'
+        self.distribute_guess(self.message_in)
+        self.message_in.payload['message_type']='distribute_contact'
+        self.message_in.payload['contact_guess'] = 'quest'
+        self.message_in.payload['guess_id'] = self.game.last_guess_id
+        self.assertTrue(len(self.game.active_guesses[self.game.last_guess_id]['contacts'])==1)
+        self.assertEqual(
+            self.game.active_guesses[self.game.last_guess_id]['contacts'],
+            (
+                self.message_in.payload['sender_id'],
+                self.game.active_players[self.message_in.payload['sender_id']]['player_alias'])
+            )
+        self.assertEqual(
+            2*len(self.game.active_players),
+            len(self.game.network_obj.outbox)
+            )
+
