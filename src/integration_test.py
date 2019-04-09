@@ -11,8 +11,7 @@ def fake_new_game(player_obj):
 def fake_submit_word(player_obj):
     player.network_obj.inbox.append(Message({
         'message_type':'submit_secret_word',
-        'sender_id':0,
-        'message_id':0,
+        'sender_id':'t',
         'secret_word':'quine'
         }))
     pass

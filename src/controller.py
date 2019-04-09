@@ -62,6 +62,6 @@ class Controller:
 
     def process_outbox(self):
         if self.network_obj.outbox:
-            print('sent messages')
+            print('sent messages', self.network_obj.outbox[0].m_uid())
             self.network_obj.transmit()
 

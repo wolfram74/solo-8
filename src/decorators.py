@@ -8,7 +8,8 @@ def route(route_to_be):
         self.last_message_id +=1
         if message:
             new_message = route_to_be(self, message)
-            new_message.payload['response_to'] = message.m_uid()
+            if not message.payload['sender_id']=='t':
+                new_message.payload['response_to'] = message.m_uid()
         else:
             new_message = route_to_be(self)
         new_message.payload['message_id'] = self.last_message_id

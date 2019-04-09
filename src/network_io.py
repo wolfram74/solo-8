@@ -17,7 +17,7 @@ class NetworkIO():
 
     def transmit(self):
         next_message = self.outbox.pop(0)
-        print(next_message.payload)
+        # print(next_message.payload)
         m_uid = next_message.m_uid()
         next_message.set_last_sent(time())
         if next_message.persistent:
