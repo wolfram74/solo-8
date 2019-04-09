@@ -57,7 +57,7 @@ class TestPlayerRoutes(unittest.TestCase):
         self.message_in.payload['guess_clue'] = 'asking about something'
         self.message_in.payload['sender_id'] = 't'
         self.player.submit_guess(self.message_in)
-        self.assertTrue(len(self.network_obj.outbox)==1)
+        self.assertTrue(len(self.player.network_obj.outbox)==1)
         self.assertEqual(
             self.player.network_obj.outbox[0].payload['message_type'],
             'distribute_guess'

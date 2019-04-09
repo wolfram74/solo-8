@@ -64,6 +64,17 @@ class Player(Controller):
             })
         return outbound
 
+    @decorators.route
+    def submit_guess(self, message):
+        outbound = Message({
+            'message_type':'distribute_guess',
+            'guess_word':message.payload['guess_word'],
+            'guess_clue':message.payload['guess_clue'],
+            'destination':self.game_address,
+
+            })
+        return outbound
+
     def receive_new_secret_word(self, message):
         self.secret_word = message.payload['secret_word']
         self.visible_letters = 1
