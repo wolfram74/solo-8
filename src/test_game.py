@@ -47,3 +47,17 @@ class TestGameRoutes(unittest.TestCase):
             self.game.network_obj.outbox[0].payload['destination'],
             self.game.network_obj.outbox[1].payload['destination']
             )
+
+    def testDistributeGuess(self):
+        self.message_in.payload['message_type']='distribute_guess'
+        self.message_in.payload['guess_word'] = 'query'
+        self.message_in.payload['guess_clue'] = 'asking about something'
+        last_guess_id = self.game.last_guess_id
+        self.game.distribute_guess(self.message_in)
+        self.assertNotEqual(last_guess_id, self.game.last_guess_id)
+        self.assertEqual(len(self.game.active_guesses), 1)
+        self.assertEqual(
+            len(self.game.active_players),
+            len(self.game.network_obj.outbox)
+            )
+

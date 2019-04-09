@@ -13,9 +13,8 @@ class Game(Controller):
         self.active_players = {}
         self.secret_word = ''
         self.chars_revealed = 0
-        self.last_clue_id = 0
-        self.active_clues = {}
-        self.contacted_clue = 0
+        self.active_guesses = {}
+        self.last_guess_id = 0
 
     def add_new_player(self, message):
         new_id = message.payload['player_id']
@@ -38,6 +37,23 @@ class Game(Controller):
         outbound = Message({
             'message_type':'receive_new_secret_word',
             'secret_word':message.payload['secret_word'],
+            })
+        return outbound
+
+    @decorators.game_multicast_route
+    def distribute_guess(self, message):
+        self.last_guess_id+=1
+        self.active_guesses[self.last_guess_id] ={
+            'guess_word':message.payload['guess_word'],
+            'guess_clue':message.payload['guess_clue'],
+            'blocks':[],
+            'contacts':[]
+        }
+        outbound = Message({
+            'message_type':'receive_new_guess',
+            'guess_word':message.payload['guess_word'],
+            'guess_clue':message.payload['guess_clue'],
+            'guess_id':self.last_guess_id,
             })
         return outbound
 
