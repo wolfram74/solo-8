@@ -16,6 +16,14 @@ def fake_submit_word(player_obj):
         }))
     pass
 
+def fake_submit_guess(player_obj):
+    player.network_obj.inbox.append(Message({
+        'message_type':'submit_guess',
+        'sender_id':'t',
+        'guess_word':'query',
+        'guess_clue':'asking a question'
+        }))
+
 if __name__ == '__main__':
     player = Player.set_up_controller()
     subprocess.Popen(
@@ -26,6 +34,7 @@ if __name__ == '__main__':
     benchmarks = [
     (2,fake_new_game),
     (4,fake_submit_word),
+    (6,fake_submit_guess),
     ]
     while True:
         player.primary_loop()
