@@ -75,6 +75,24 @@ class Game(Controller):
             })
         return outbound
 
+    @decorators.game_multicast_route
+    def distribute_block(self, message):
+        guess_id = message.payload['guess_id']
+        block = message.payload['guess_block']
+        blocked_ids = []
+        contact_count = len(self.active_guesses[guess_id]['contacts'])
+        for cont_ind in range(contact_count-1, -1, -1):
+            contact = self.active_guesses[guess_id]['contacts'][cont_ind]
+            if contact[2] == block:
+                blocked_ids.append(contact[0])
+                del self.active_guesses[guess_id]['contacts'][cont_ind]
+        outbound = Message({
+            'message_type':'receive_block_resolution',
+            'guess_id': guess_id,
+            'guess_block': block,
+            'blocked_ids': blocked_ids,
+            })
+        return outbound
     def sender_id(self):
         return self.game_id
 
