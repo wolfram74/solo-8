@@ -11,6 +11,7 @@ class TestPlayerRoutes(unittest.TestCase):
             'message_id':1,
             'message_type':'generate_player_id',
             'sender_id':2,
+            'response_to':('',0,1),
             'origin':('127.0.0.1', 12003),
             'destination':('127.0.0.1', 12001),
             })
@@ -129,7 +130,7 @@ class TestPlayerRoutes(unittest.TestCase):
         #     )
         self.assertEqual(
             self.player.network_obj.outbox[0].payload['message_type'],
-            'submit_contact'
+            'distribute_contact'
             )
 
     @unittest.skip('deferred')

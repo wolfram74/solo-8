@@ -88,7 +88,18 @@ class Player(Controller):
             'blocks':[],
             'contacts':[]
         }
-        self.send_ack(message)
+        if message.payload['response_to'][1] == self.player_id:
+            self.auto_contact(message)
+        else:
+            self.send_ack(message)
+
+    def auto_contact(self, message):
+        self.submit_contact(Message({
+            'contact_guess':message.payload['guess_word'],
+            'guess_id':message.payload['guess_id'],
+            'sender_id':'t',
+            'message_type':'submit_contact',
+            }))
 
     @decorators.route
     def submit_contact(self,message):
