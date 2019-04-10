@@ -29,6 +29,7 @@ class Message():
             )
 
 #QOL TODO: easy_payload function that instantiates payload values as instance variables when otherwise undefined.
+#setattr(self, key, value)
 
     @classmethod
     def fromByteString(cls, byte_string):

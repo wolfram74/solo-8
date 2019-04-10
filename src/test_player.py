@@ -135,9 +135,17 @@ class TestPlayerRoutes(unittest.TestCase):
             'distribute_contact'
             )
 
-    @unittest.skip('deferred')
     def testSubmitBlock(self):
-        pass
+        self.message_in.payload['message_type'] = 'submit_block'
+        self.message_in.payload['guess_id'] = 1
+        self.message_in.payload['guess_block'] = 'quest'
+        self.message_in.payload['sender_id'] = 't'
+        self.player.submit_block(self.message_in)
+        self.assertEqual(
+            self.player.network_obj.outbox[0].payload['message_type'],
+            'distribute_block'
+            )
+
 
     @unittest.skip('deferred')
     def testReceiveBlockResolution(self):
