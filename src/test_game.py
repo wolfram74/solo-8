@@ -25,7 +25,7 @@ class TestGameRoutes(unittest.TestCase):
             'message_type':'generate_player_id',
             'sender_id':2,
             'origin':('127.0.0.1', 12003),
-            'destination':('127.0.0.1', 12002),
+            'destination':('127.0.0.1', 120018),
             })
 
     def tearDown(self):
@@ -84,3 +84,36 @@ class TestGameRoutes(unittest.TestCase):
             len(self.game.network_obj.outbox)
             )
 
+    def testDistributeBlock(self):
+        self.message_in.payload['message_type']='distribute_guess'
+        self.message_in.payload['guess_word'] = 'query'
+        self.message_in.payload['guess_clue'] = 'asking about something'
+        self.game.distribute_guess(self.message_in)
+        self.message_in.payload['message_type']='distribute_contact'
+        self.message_in.payload['contact_guess'] = 'query'
+        self.message_in.payload['guess_id'] = self.game.last_guess_id
+        self.game.distribute_contact(self.message_in)
+        self.message_in.payload['message_type']='distribute_contact'
+        self.message_in.payload['contact_guess'] = 'quest'
+        self.message_in.payload['sender_id'] = 1
+        self.message_in.payload['guess_id'] = self.game.last_guess_id
+        self.game.distribute_contact(self.message_in)
+        self.message_in.payload['message_type']='distribute_contact'
+        self.message_in.payload['contact_guess'] = 'quest'
+        self.message_in.payload['sender_id'] = 3
+        self.message_in.payload['guess_id'] = self.game.last_guess_id
+        self.game.distribute_contact(self.message_in)
+
+        self.message_in.payload['message_type']='distribute_block'
+        self.message_in.payload['guess_block'] = 'quest'
+        self.message_in.payload['sender_id'] = 1
+        self.message_in.payload['guess_id'] = self.game.last_guess_id
+        self.game.distribute_block(self.message_in)
+
+        self.assertEqual(
+            len(self.game.network_obj.outbox[-1].payload['blocked_ids']), 2
+            )
+        self.assertEqual(
+            self.game.network_obj.outbox[-1].payload['message_type'],
+            'receive_block_resolution'
+            )
