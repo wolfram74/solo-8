@@ -120,7 +120,7 @@ class Player(Controller):
         self.send_ack(message)
 
     @decorators.route
-    def submit_block(Self, message):
+    def submit_block(self, message):
         outbound = Message({
             'message_type':'distribute_block',
             'destination':self.game_address,
