@@ -28,7 +28,10 @@ class Message():
             self.payload['message_id']
             )
 
+#QOL TODO: easy_payload function that instantiates payload values as instance variables when otherwise undefined.
+
     @classmethod
     def fromByteString(cls, byte_string):
         unpacked_dict = decoding(byte_string)
         return Message(unpacked_dict)
+

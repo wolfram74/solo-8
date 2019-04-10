@@ -97,6 +97,7 @@ class TestPlayerRoutes(unittest.TestCase):
         self.message_in.payload['message_type'] = 'receive_new_contact'
         self.message_in.payload['guess_id'] = 1
         self.message_in.payload['player_alias'] = 'fifo'
+        self.message_in.payload['player_id'] = 7
         self.message_in.payload['sender_id'] = 17
         self.player.active_guesses[1] ={
             'guess_word':'foof',
@@ -107,6 +108,7 @@ class TestPlayerRoutes(unittest.TestCase):
         self.assertTrue(len(self.player.active_guesses[1]['contacts'])==0)
         self.player.receive_contact_notification(self.message_in)
         self.assertTrue(len(self.player.active_guesses[1]['contacts'])==1)
+        self.assertTrue(len(self.player.active_guesses[1]['contacts'][0])==2)
         self.assertTrue(len(self.player.network_obj.outbox)==1)
         self.assertEqual(
             self.player.network_obj.outbox[0].payload['message_type'],

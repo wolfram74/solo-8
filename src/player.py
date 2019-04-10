@@ -112,8 +112,10 @@ class Player(Controller):
 
     def receive_contact_notification(self, message):
         # print(self.active_guesses)
-        self.active_guesses[message.payload['guess_id']]['contacts'].append(
-            message.payload['player_alias']
+        self.active_guesses[message.payload['guess_id']]['contacts'].append((
+                message.payload['player_id'],
+                message.payload['player_alias']
+                )
             )
         self.send_ack(message)
 
