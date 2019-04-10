@@ -68,9 +68,9 @@ class Game(Controller):
                 )
             )
         outbound = Message({
-            'message_type':'receive_notification',
+            'message_type':'receive_contact_notification',
             'guess_id':guess_id,
-            'player_alias': self.active_players[message.payload['sender_id']]
+            'player_alias': self.active_players[message.payload['sender_id']]['player_alias']
             })
         return outbound
 

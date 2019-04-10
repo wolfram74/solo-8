@@ -6,6 +6,7 @@ from player import Player
 class TestPlayerRoutes(unittest.TestCase):
     def setUp(self):
         self.player = Player.set_up_controller()
+        self.player.player_id=2
         self.message_in = Message({
             'message_id':1,
             'message_type':'generate_player_id',
@@ -109,6 +110,26 @@ class TestPlayerRoutes(unittest.TestCase):
         self.assertEqual(
             self.player.network_obj.outbox[0].payload['message_type'],
             'ack'
+            )
+
+    def testAutoContactOwnGuess(self):
+        self.message_in.payload['message_type'] = 'receive_new_guess'
+        self.message_in.payload['guess_word'] = 'query'
+        self.message_in.payload['guess_clue'] = 'asking about something'
+        self.message_in.payload['guess_id'] = 7
+        self.message_in.payload['response_to'] = ('distribute_guess',2, 9 )
+        self.message_in.payload['sender_id'] = 17
+        self.assertTrue(len(self.player.active_guesses)==0)
+        self.player.receive_new_guess(self.message_in)
+        self.assertTrue(len(self.player.active_guesses)==1)
+        self.assertTrue(len(self.player.network_obj.outbox)==1)
+        # self.assertEqual(
+        #     self.player.network_obj.outbox[0].payload['message_type'],
+        #     'ack'
+        #     )
+        self.assertEqual(
+            self.player.network_obj.outbox[0].payload['message_type'],
+            'submit_contact'
             )
 
     @unittest.skip('deferred')

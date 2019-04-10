@@ -101,6 +101,7 @@ class Player(Controller):
         return outbound
 
     def receive_contact_notification(self, message):
+        # print(self.active_guesses)
         self.active_guesses[message.payload['guess_id']]['contacts'].append(
             message.payload['player_alias']
             )
