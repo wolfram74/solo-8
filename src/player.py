@@ -129,6 +129,19 @@ class Player(Controller):
             })
         return outbound
 
+    def receive_block_resolution(self, message):
+        guess_id = message.payload['guess_id']
+        self.active_guesses[guess_id]['blocks'].append(
+            message.payload['guess_block']
+            )
+        for player_id in message.payload['blocked_ids']:
+            for contact_id in range(len(self.active_guesses[guess_id]['contacts'])):
+                contact = self.active_guesses[guess_id]['contacts'][contact_id]
+                if contact[0] == player_id:
+                    del self.active_guesses[guess_id]['contacts'][contact_id]
+                    break
+        self.send_ack(message)
+
     def set_player_id(self, message):
         self.player_id = message.payload['player_id']
         # print('!!! player ID set\n')

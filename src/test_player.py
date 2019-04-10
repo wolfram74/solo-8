@@ -147,9 +147,34 @@ class TestPlayerRoutes(unittest.TestCase):
             )
 
 
-    @unittest.skip('deferred')
     def testReceiveBlockResolution(self):
-        pass
+        self.player.active_guesses[1] = {
+            'guess_word': 'query',
+            'guess_clue': 'asking about something',
+            'blocks': [],
+            'contacts': []
+        }
+        # (11, 'p11'), (12, 'p12'), (19,'p19')
+        self.message_in.payload['message_type'] = 'receive_contact_notification'
+        self.message_in.payload['guess_id'] = 1
+        self.message_in.payload['player_alias'] = 'p11'
+        self.message_in.payload['player_id'] = 11
+        self.message_in.payload['sender_id'] = 17
+        self.player.receive_contact_notification(self.message_in)
+        self.message_in.payload['player_alias'] = 'p12'
+        self.message_in.payload['player_id'] = 12
+        self.player.receive_contact_notification(self.message_in)
+        self.message_in.payload['player_alias'] = 'p19'
+        self.message_in.payload['player_id'] = 19
+        self.player.receive_contact_notification(self.message_in)
+        self.assertEqual(len(self.player.active_guesses[1]['contacts']),3)
+        self.message_in.payload['message_type'] = 'receive_block_resolution'
+        self.message_in.payload['guess_id'] = 1
+        self.message_in.payload['guess_block'] = 'qualia'
+        self.message_in.payload['blocked_ids'] = [11, 19]
+        self.player.receive_block_resolution(self.message_in)
+        self.assertEqual(len(self.player.active_guesses[1]['contacts']),1)
+        self.assertEqual(len(self.player.active_guesses[1]['blocks']),1)
 
     @unittest.skip('deferred')
     def testSubmitCall(self):
