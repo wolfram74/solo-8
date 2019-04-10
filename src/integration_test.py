@@ -32,6 +32,14 @@ def fake_submit_contact(player_obj):
         'contact_guess':'question',
         }))
 
+def fake_submit_block(player_obj):
+    player.network_obj.inbox.append(Message({
+        'message_type':'submit_block',
+        'sender_id':'t',
+        'guess_id':1,
+        'guess_block':'qualm',
+        }))
+
 
 if __name__ == '__main__':
     player = Player.set_up_controller()
@@ -45,6 +53,7 @@ if __name__ == '__main__':
     (4,fake_submit_word),
     (6,fake_submit_guess),
     (8,fake_submit_contact),
+    (10,fake_submit_block),
     ]
     while True:
         player.primary_loop()
