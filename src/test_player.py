@@ -123,11 +123,11 @@ class TestPlayerRoutes(unittest.TestCase):
         self.assertTrue(len(self.player.active_guesses)==0)
         self.player.receive_new_guess(self.message_in)
         self.assertTrue(len(self.player.active_guesses)==1)
-        self.assertTrue(len(self.player.network_obj.outbox)==1)
-        # self.assertEqual(
-        #     self.player.network_obj.outbox[0].payload['message_type'],
-        #     'ack'
-        #     )
+        self.assertTrue(len(self.player.network_obj.outbox)==2)
+        self.assertEqual(
+            self.player.network_obj.outbox[1].payload['message_type'],
+            'ack'
+            )
         self.assertEqual(
             self.player.network_obj.outbox[0].payload['message_type'],
             'distribute_contact'

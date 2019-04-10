@@ -90,8 +90,7 @@ class Player(Controller):
         }
         if message.payload['response_to'][1] == self.player_id:
             self.auto_contact(message)
-        else:
-            self.send_ack(message)
+        self.send_ack(message)
 
     def auto_contact(self, message):
         self.submit_contact(Message({
