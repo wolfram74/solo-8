@@ -183,7 +183,7 @@ class TestPlayerRoutes(unittest.TestCase):
         self.player.submit_call(self.message_in)
         self.assertEqual(
             self.player.network_obj.outbox[0].payload['message_type'],
-            'distribute_block'
+            'distribute_call'
             )
 
 

@@ -142,6 +142,16 @@ class Player(Controller):
                     break
         self.send_ack(message)
 
+    @decorators.route
+    def submit_call(self, message):
+        outbound = Message({
+            'message_type':'distribute_call',
+            'guess_id':message.payload['guess_id'],
+            'destination':self.game_address
+            })
+        return outbound
+
+
     def set_player_id(self, message):
         self.player_id = message.payload['player_id']
         # print('!!! player ID set\n')
