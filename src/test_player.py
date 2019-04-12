@@ -19,6 +19,34 @@ class TestPlayerRoutes(unittest.TestCase):
     def tearDown(self):
         self.player.network_obj.socket.close()
 
+    def setUpPlayerWithSecretWord(self):
+        self.message_in.payload['message_type']='receive_new_secret_word'
+        self.message_in.payload['secret_word']='quine'
+        self.player.receive_new_secret_word(self.message_in)
+
+    def setUpPlayerStateWithContacts(self):
+        self.setUpPlayerWithSecretWord()
+        self.message_in.payload['message_type'] = 'receive_new_guess'
+        self.message_in.payload['guess_word'] = 'query'
+        self.message_in.payload['guess_clue'] = 'asking about something'
+        self.message_in.payload['guess_id'] = 1
+        self.message_in.payload['sender_id'] = 17
+        self.player.receive_new_guess(self.message_in)
+
+        self.message_in.payload['message_type'] = 'receive_contact_notification'
+        self.message_in.payload['guess_id'] = 1
+
+        self.message_in.payload['player_alias'] = 'p11'
+        self.message_in.payload['player_id'] = 11
+        self.message_in.payload['sender_id'] = 17
+        self.player.receive_contact_notification(self.message_in)
+        self.message_in.payload['player_alias'] = 'p12'
+        self.message_in.payload['player_id'] = 12
+        self.player.receive_contact_notification(self.message_in)
+        self.message_in.payload['player_alias'] = 'p19'
+        self.message_in.payload['player_id'] = 19
+        self.player.receive_contact_notification(self.message_in)
+
     def testRequestPlayerID(self):
         self.player.request_player_id()
         self.assertTrue(
@@ -148,25 +176,7 @@ class TestPlayerRoutes(unittest.TestCase):
 
 
     def testReceiveBlockResolution(self):
-        self.player.active_guesses[1] = {
-            'guess_word': 'query',
-            'guess_clue': 'asking about something',
-            'blocks': [],
-            'contacts': []
-        }
-        # (11, 'p11'), (12, 'p12'), (19,'p19')
-        self.message_in.payload['message_type'] = 'receive_contact_notification'
-        self.message_in.payload['guess_id'] = 1
-        self.message_in.payload['player_alias'] = 'p11'
-        self.message_in.payload['player_id'] = 11
-        self.message_in.payload['sender_id'] = 17
-        self.player.receive_contact_notification(self.message_in)
-        self.message_in.payload['player_alias'] = 'p12'
-        self.message_in.payload['player_id'] = 12
-        self.player.receive_contact_notification(self.message_in)
-        self.message_in.payload['player_alias'] = 'p19'
-        self.message_in.payload['player_id'] = 19
-        self.player.receive_contact_notification(self.message_in)
+        self.setUpPlayerStateWithContacts()
         self.assertEqual(len(self.player.active_guesses[1]['contacts']),3)
         self.message_in.payload['message_type'] = 'receive_block_resolution'
         self.message_in.payload['guess_id'] = 1
@@ -186,9 +196,25 @@ class TestPlayerRoutes(unittest.TestCase):
             'distribute_call'
             )
 
-
-    @unittest.skip('deferred')
     def testReceiveCallResolution(self):
-        pass
+        self.setUpPlayerStateWithContacts()
+        self.message_in.payload['message_type'] = 'receive_call_resolution'
+        self.message_in.payload['sender_id'] = 1
+        self.message_in.payload['guess_id'] = 1
+        self.message_in.payload['call_success'] = True
+        self.player.receive_call_resolution(self.message_in)
+        self.assertEqual(
+            len(self.player.active_guesses),
+            0
+            )
+        self.assertEqual(
+            self.player.visible_letters,
+            2
+            )
+        self.assertEqual(
+            len(self.player.visible_word()),
+            2
+            )
+
 
 
