@@ -3,6 +3,7 @@ from player import Player
 from message import Message
 import subprocess
 from time import time
+import sys
 
 def fake_new_game(player_obj):
     player.request_new_game()
@@ -49,9 +50,10 @@ def fake_submit_call(player_obj):
 
 if __name__ == '__main__':
     player = Player.set_up_controller()
-    subprocess.Popen(
-        ['python3','lobby.py']
-        )
+    if 'PROD' not in sys.argv:
+        subprocess.Popen(
+            ['python3','lobby.py']
+            )
     player.request_player_id()
     start_time = time()
     benchmarks = [
