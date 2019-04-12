@@ -28,13 +28,42 @@ class TestGameRoutes(unittest.TestCase):
             'destination':('127.0.0.1', 120018),
             })
 
-    def tearDown(self):
-        self.game.network_obj.socket.close()
-
-    def testDistributeSecretWord(self):
+    def setUpGameWithWord(self):
         self.message_in.payload['message_type']='distribute_secret_word'
         self.message_in.payload['secret_word']='quine'
         self.game.distribute_secret_word(self.message_in)
+
+    def setUpGameWithGuess(self):
+        self.setUpGameWithWord()
+        self.message_in.payload['message_type']='distribute_guess'
+        self.message_in.payload['guess_word'] = 'query'
+        self.message_in.payload['guess_clue'] = 'asking about something'
+        self.game.distribute_guess(self.message_in)
+
+    def setUpGameWithContacts(self):
+        self.setUpGameWithGuess()
+        self.message_in.payload['message_type']='distribute_contact'
+        self.message_in.payload['contact_guess'] = 'query'
+        self.message_in.payload['sender_id'] = 1
+        self.message_in.payload['guess_id'] = self.game.last_guess_id
+        self.game.distribute_contact(self.message_in)
+        self.message_in.payload['message_type']='distribute_contact'
+        self.message_in.payload['contact_guess'] = 'query'
+        self.message_in.payload['sender_id'] = 2
+        self.message_in.payload['guess_id'] = self.game.last_guess_id
+        self.game.distribute_contact(self.message_in)
+        self.message_in.payload['message_type']='distribute_contact'
+        self.message_in.payload['contact_guess'] = 'qualia'
+        self.message_in.payload['sender_id'] = 3
+        self.message_in.payload['guess_id'] = self.game.last_guess_id
+        self.game.distribute_contact(self.message_in)
+
+    def tearDown(self):
+        self.game.network_obj.socket.close()
+
+
+    def testDistributeSecretWord(self):
+        self.setUpGameWithWord()
         self.assertEqual(
             len(self.game.active_players),
             len(self.game.network_obj.outbox)
@@ -49,15 +78,12 @@ class TestGameRoutes(unittest.TestCase):
             )
 
     def testDistributeGuess(self):
-        self.message_in.payload['message_type']='distribute_guess'
-        self.message_in.payload['guess_word'] = 'query'
-        self.message_in.payload['guess_clue'] = 'asking about something'
         last_guess_id = self.game.last_guess_id
-        self.game.distribute_guess(self.message_in)
+        self.setUpGameWithGuess()
         self.assertNotEqual(last_guess_id, self.game.last_guess_id)
         self.assertEqual(len(self.game.active_guesses), 1)
         self.assertEqual(
-            len(self.game.active_players),
+            2*len(self.game.active_players),
             len(self.game.network_obj.outbox)
             )
 
@@ -85,27 +111,9 @@ class TestGameRoutes(unittest.TestCase):
             )
 
     def testDistributeBlock(self):
-        self.message_in.payload['message_type']='distribute_guess'
-        self.message_in.payload['guess_word'] = 'query'
-        self.message_in.payload['guess_clue'] = 'asking about something'
-        self.game.distribute_guess(self.message_in)
-        self.message_in.payload['message_type']='distribute_contact'
-        self.message_in.payload['contact_guess'] = 'query'
-        self.message_in.payload['guess_id'] = self.game.last_guess_id
-        self.game.distribute_contact(self.message_in)
-        self.message_in.payload['message_type']='distribute_contact'
-        self.message_in.payload['contact_guess'] = 'quest'
-        self.message_in.payload['sender_id'] = 1
-        self.message_in.payload['guess_id'] = self.game.last_guess_id
-        self.game.distribute_contact(self.message_in)
-        self.message_in.payload['message_type']='distribute_contact'
-        self.message_in.payload['contact_guess'] = 'quest'
-        self.message_in.payload['sender_id'] = 3
-        self.message_in.payload['guess_id'] = self.game.last_guess_id
-        self.game.distribute_contact(self.message_in)
-
+        self.setUpGameWithContacts()
         self.message_in.payload['message_type']='distribute_block'
-        self.message_in.payload['guess_block'] = 'quest'
+        self.message_in.payload['guess_block'] = 'query'
         self.message_in.payload['sender_id'] = 1
         self.message_in.payload['guess_id'] = self.game.last_guess_id
         self.game.distribute_block(self.message_in)
