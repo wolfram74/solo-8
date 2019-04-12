@@ -39,6 +39,12 @@ def fake_submit_block(player_obj):
         'guess_id':1,
         'guess_block':'qualm',
         }))
+def fake_submit_call(player_obj):
+    player.network_obj.inbox.append(Message({
+        'message_type':'submit_call',
+        'sender_id':'t',
+        'guess_id':1,
+        }))
 
 
 if __name__ == '__main__':
@@ -54,6 +60,7 @@ if __name__ == '__main__':
     (6,fake_submit_guess),
     (8,fake_submit_contact),
     (10,fake_submit_block),
+    (12,fake_submit_call),
     ]
     while True:
         player.primary_loop()
