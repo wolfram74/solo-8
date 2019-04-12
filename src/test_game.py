@@ -125,3 +125,21 @@ class TestGameRoutes(unittest.TestCase):
             self.game.network_obj.outbox[-1].payload['message_type'],
             'receive_block_resolution'
             )
+
+    def testDistributeCall(self):
+        self.setUpGameWithContacts()
+        self.message_in.payload['message_type']='distribute_call'
+        self.message_in.payload['sender_id'] = 1
+        self.message_in.payload['guess_id'] = self.game.last_guess_id
+        self.game.distribute_call(self.message_in)
+        self.assertEqual(
+            len(self.game.active_guesses), 0
+            )
+        self.assertEqual(
+            self.game.network_obj.outbox[-1].payload['message_type'],
+            'receive_call_resolution'
+            )
+        self.assertEqual(
+            self.game.network_obj.outbox[-1].payload['call_success'],
+            True
+            )
