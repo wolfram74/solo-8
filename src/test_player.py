@@ -176,9 +176,16 @@ class TestPlayerRoutes(unittest.TestCase):
         self.assertEqual(len(self.player.active_guesses[1]['contacts']),1)
         self.assertEqual(len(self.player.active_guesses[1]['blocks']),1)
 
-    @unittest.skip('deferred')
     def testSubmitCall(self):
-        pass
+        self.message_in.payload['message_type'] = 'submit_call'
+        self.message_in.payload['sender_id'] = 't'
+        self.message_in.payload['guess_id'] = 1
+        self.player.submit_call(self.message_in)
+        self.assertEqual(
+            self.player.network_obj.outbox[0].payload['message_type'],
+            'distribute_block'
+            )
+
 
     @unittest.skip('deferred')
     def testReceiveCallResolution(self):
