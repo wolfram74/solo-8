@@ -93,6 +93,30 @@ class Game(Controller):
             'blocked_ids': blocked_ids,
             })
         return outbound
+
+    @decorators.game_multicast_route
+    def distribute_call(self, message):
+        guess_id = message.payload['guess_id']
+        outbound = Message({
+            'message_type': 'receive_call_resolution',
+            'guess_id': guess_id,
+            'call_success': False
+            })
+        contact_census = {}
+        for cont_id in range(len(self.active_guesses[guess_id]['contacts'])):
+            contact = self.active_guesses[guess_id]['contacts'][cont_id]
+            if contact[2] in contact_census:
+                contact_census[contact[2]]+=1
+                continue
+            contact_census[contact[2]] = 1
+        for word in contact_census.keys():
+            if contact_census[word]==1:
+                continue
+            outbound.payload['call_success'] = True
+            outbound.payload['matched_word'] = word
+            break
+        del self.active_guesses[guess_id]
+        return outbound
     def sender_id(self):
         return self.game_id
 
