@@ -151,6 +151,12 @@ class Player(Controller):
             })
         return outbound
 
+    def receive_call_resolution(self, message):
+        guess_id = message.payload['guess_id']
+        if message.payload['call_success']:
+            self.visible_letters+=1
+        del self.active_guesses[guess_id]
+        self.send_ack(message)
 
     def set_player_id(self, message):
         self.player_id = message.payload['player_id']

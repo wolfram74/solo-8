@@ -1,0 +1,6 @@
+premature optimization is the root of all evil ... in programming. - donald knuth
+----
+team 8 set up
+You can test run the communicators with src/communications/communicator/udp/test/manual_test.py on the coms_testing branch
+If you don't use pycharm you have to append the Team-8 directory to your PYTHONPATH, ie "PYTHONPATH=~/Projects/cs5200/Team-8 python src/communications/communicator/udp/test/manual_test.py "
+----
